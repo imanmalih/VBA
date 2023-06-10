@@ -1,0 +1,150 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2709
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 Sub Multiple_Year_Stock()\
+\
+\
+'Run Code Through All Worksheets\
+\
+Dim ws As Worksheet\
+\
+For Each ws In ThisWorkbook.Worksheets\
+\
+\
+\
+'Constants\
+Dim TickerSymbol As String\
+Dim OpeningPrice As Double\
+Dim ClosingPrice As Double\
+Dim YearlyChange As Double\
+Dim PercentChange As Double\
+Dim TotalStockVolume As Double\
+Dim GreatestPercentIncrease As Double\
+Dim GreatestPercentDecrease As Double\
+Dim GreatestTotalVolume As Double\
+Dim GreatestPercentIncreaseTicker As String\
+Dim GreatestPercentDecreaseTicker As String\
+Dim GreatestTotalVolTicker As String\
+Dim RowEnd As Double\
+Dim PreviousTicker As String\
+Dim NextTicker As String\
+Dim SummaryRow As Double\
+\
+\
+\
+'Labels/Assign\
+ws.Cells(1, 9).Value = "Ticker"\
+ws.Cells(1, 10).Value = "Yearly Change"\
+ws.Cells(1, 11).Value = "Percent Change"\
+ws.Cells(1, 12).Value = "Total Stock Volume"\
+ws.Cells(1, 16).Value = "Ticker"\
+ws.Cells(1, 17).Value = "Value"\
+ws.Cells(2, 15).Value = "Greatest % Increase"\
+ws.Cells(3, 15).Value = "Greatest % Decrease"\
+ws.Cells(4, 15).Value = "Total Volume"\
+SummaryRow = 2\
+RowEnd = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row\
+GreatestPercentIncrease = 0\
+OpeningPrice = ws.Cells(2, 3).Value\
+TotalStockVolume = 0\
+GreatestPercentDecrease = 0\
+GreatestTotalVolume = 0\
+\
+'MsgBox (RowEnd)\
+\
+For i = 2 To RowEnd\
+\
+    TickerSymbol = ws.Cells(i, 1).Value\
+    NextTicker = ws.Cells(i + 1, 1).Value\
+    \
+\
+    If NextTicker <> TickerSymbol Then\
+\
+        ClosingPrice = ws.Cells(i, 6).Value\
+        \
+        YearlyChange = ClosingPrice - OpeningPrice\
+    \
+        PercentChange = (YearlyChange / OpeningPrice)\
+        \
+        ws.Cells(SummaryRow, 10).Value = YearlyChange\
+        \
+        If YearlyChange > 0 Then\
+            ws.Cells(SummaryRow, 10).Interior.Color = RGB(0, 255, 0)\
+        Else\
+            ws.Cells(SummaryRow, 10).Interior.Color = RGB(255, 0, 0)\
+        End If\
+        \
+        ws.Cells(SummaryRow, 11).Value = PercentChange\
+        ws.Cells(SummaryRow, 11).NumberFormat = "0.00%"\
+        ws.Cells(SummaryRow, 9).Value = TickerSymbol\
+        ws.Cells(SummaryRow, 12).Value = TotalStockVolume\
+        TotalStockVolume = 0\
+        SummaryRow = SummaryRow + 1\
+        OpeningPrice = ws.Cells(i + 1, 3).Value\
+        \
+        \
+    Else\
+    \
+    TotalStockVolume = ws.Cells(i, 7).Value + TotalStockVolume\
+    \
+    \
+    End If\
+    \
+        \
+    If PercentChange > GreatestPercentIncrease Then\
+     \
+        GreatestPercentIncrease = PercentChange\
+    \
+        GreatestPercentIncreaseTicker = TickerSymbol\
+        \
+        ws.Cells(2, 17).Value = GreatestPercentIncrease\
+        ws.Cells(2, 17).NumberFormat = "0.00%"\
+        ws.Cells(2, 16).Value = GreatestPercentIncreaseTicker\
+    \
+    End If\
+    \
+    If PercentChange < GreatestPercentDecrease Then\
+        \
+        GreatestPercentDecrease = PercentChange\
+        \
+        GreatestPercentDecreaseTicker = TickerSymbol\
+        \
+        ws.Cells(3, 17).Value = GreatestPercentDecrease\
+        ws.Cells(3, 17).NumberFormat = "0.00%"\
+        ws.Cells(3, 16).Value = GreatestPercentDecreaseTicker\
+        \
+    End If\
+    \
+    If TotalStockVolume > GreatestTotalVolume Then\
+    \
+        GreatestTotalVolume = TotalStockVolume\
+        \
+        GreatestTotalVolTicker = TickerSymbol\
+        \
+        ws.Cells(4, 17).Value = GreatestTotalVolume\
+        ws.Cells(4, 16).Value = GreatestTotalVolTicker\
+        \
+    End If\
+    \
+'For Each Cell In YearlyChange\
+   \
+    'If YearlyChange > 0 Then\
+        'ws.Cell.Interior.Color = RGB(0, 255, 0)\
+    'ElseIf YearlyChange < 0 Then\
+        'ws.Cell.Interior.Color = RGB(255, 0, 0)\
+        \
+'Next Cell\
+    \
+        \
+\
+\
+Next i\
+\
+Next ws\
+\
+End Sub\
+}
